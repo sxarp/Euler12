@@ -43,7 +43,8 @@ defmodule Eular12 do
     main=self()
 
     spawn(fn ->
-      send(main, {Eular12.calTri(val)>=max, val}) end)
+      send(main, {Eular12.calTri(val)>=max, val})
+    end)
   end
 
   def solve(x) do
