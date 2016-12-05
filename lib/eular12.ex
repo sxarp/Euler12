@@ -31,6 +31,7 @@ defmodule Eular12 do
   end
 
   defp calTrip(num, div, total)do
+
     case rem(num,div) do
       0 -> calTrip(num, div-1, total+1)
       _ -> calTrip(num, div-1, total)
@@ -38,41 +39,40 @@ defmodule Eular12 do
   end
 
   defp start_cal(val, max) do
+
     main=self()
+
     spawn(fn ->
-      send(main, {Eular12.calTri(val)>=max, val})
-    end)
+      send(main, {Eular12.calTri(val)>=max, val}) end)
   end
 
   def solve(x) do
-     loop(0, 1, x)
+    loop(0, 1, x)
   end
 
 
 
-defp loop(pnum, current, goal) do
+  defp loop(pnum, current, thre) do
 
-   if pnum < @thread do
-     start_cal(trunc((current*(current+1))/2), goal)
-     loop(pnum+1, current+1, goal)
-   else
-   receive do
-     {false, _} -> loop(pnum-1, current, goal)
-     {true, num} -> collect(pnum-1, num)
-   end
-end
-
-end
-
-defp collect(0, num), do: num
-
-defp collect(pnum, num) do
-
-  receive do
-    {true, val} -> collect(pnum-1, min(num, val))
-    _ -> collect(pnum-1, num)
+    if pnum < @thread do
+      start_cal(trunc((current*(current+1))/2), thre)
+      loop(pnum+1, current+1, thre)
+    else
+      receive do
+        {false, _} -> loop(pnum-1, current, thre)
+        {true, num} -> collect(pnum-1, num)
+      end
+    end
   end
 
-end
+  defp collect(0, num), do: num
+
+  defp collect(pnum, num) do
+
+    receive do
+      {true, val} -> collect(pnum-1, min(num, val))
+      _ -> collect(pnum-1, num)
+    end
+  end
 
 end
