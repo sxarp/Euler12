@@ -50,8 +50,6 @@ defmodule Eular12 do
     loop(0, 1, x)
   end
 
-
-
   defp loop(pnum, current, thre) do
 
     if pnum < @thread do
