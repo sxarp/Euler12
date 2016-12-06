@@ -46,14 +46,14 @@ defmodule Eular12 do
     loop(0, 1, x)
   end
 
-  defp loop(pnum, current, thre) do
+  defp loop(pnum, current, x) do
 
     if pnum < @thread do
-      start_cal(trunc((current*(current+1))/2), thre)
-      loop(pnum+1, current+1, thre)
+      start_cal(trunc((current*(current+1))/2), x)
+      loop(pnum+1, current+1, x)
     else
       receive do
-        {false, _} -> loop(pnum-1, current, thre)
+        {false, _} -> loop(pnum-1, current, x)
         {true, num} -> collect(pnum-1, num)
       end
     end
