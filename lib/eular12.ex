@@ -10,9 +10,9 @@ defmodule Eular12 do
   4
   iex> Eular12.calTri 28
   6
-  iex> Eular12.solve(6)
-  28
   iex> Eular12.solve(500)
+  76576500
+  iex> Eular12.solve_concurrent(500)
   76576500
   """
 
@@ -48,6 +48,16 @@ defmodule Eular12 do
   end
 
   def solve(x) do
+
+    Stream.iterate(0, & &1+1)
+    |> Stream.map(& trunc((&1*(&1+1))/2))
+    |> Stream.map(fn n -> {n, Eular12.calTri(n)} end)
+    |> Stream.filter(fn {_ ,val} -> val >= x end)
+    |> Stream.map(fn {val, _} -> val end)
+    |> Enum.at(0)
+  end
+
+  def solve_concurrent(x) do
     loop(0, 1, x)
   end
 
