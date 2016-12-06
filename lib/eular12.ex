@@ -16,26 +16,20 @@ defmodule Eular12 do
   76576500
   """
 
-  @thread 10
+  @thread 5
 
-  def calTri(num) when num <= 2 do
-    num
-  end
+  def calTri(num) when num <= 1, do: num
 
   def calTri(num) do
-    calTrip(num, trunc(:math.sqrt(num)), 0)
-  end
 
-  defp calTrip(num, 0, total) do
-    2*total
-  end
-
-  defp calTrip(num, div, total)do
-
-    case rem(num,div) do
-      0 -> calTrip(num, div-1, total+1)
-      _ -> calTrip(num, div-1, total)
-    end
+    Stream.iterate(1, & &1+1)
+    |> Stream.map(fn x -> case rem(num, x) do
+                          0 -> {x, true}
+                          _ -> {x, false} end end)
+    |> Stream.take_while(fn {i, _} -> i*i < num end)
+    |> Stream.filter_map(fn {_, v} -> v end, fn _ -> 1 end)
+    |> Enum.reduce(fn (u, v) -> u+v end)
+    |> (&(2*&1)).()
   end
 
   defp start_cal(val, max) do
