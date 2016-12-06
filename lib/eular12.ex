@@ -32,15 +32,6 @@ defmodule Eular12 do
     |> (&(2*&1)).()
   end
 
-  defp start_cal(val, max) do
-
-    main=self()
-
-    spawn(fn ->
-      send(main, {Eular12.calTri(val)>=max, val})
-    end)
-  end
-
   def solve(x) do
 
     Stream.iterate(0, & &1+1)
@@ -76,6 +67,15 @@ defmodule Eular12 do
       {true, val} -> collect(pnum-1, min(num, val))
       _ -> collect(pnum-1, num)
     end
+  end
+
+  defp start_cal(val, max) do
+
+    main=self()
+
+    spawn(fn ->
+      send(main, {Eular12.calTri(val)>=max, val})
+    end)
   end
 
 end
