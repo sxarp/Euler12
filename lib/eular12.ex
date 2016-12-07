@@ -69,12 +69,12 @@ defmodule Eular12 do
     end
   end
 
-  defp start_cal(val, max) do
+  defp start_cal(val, x) do
 
     main=self()
 
     spawn(fn ->
-      send(main, {Eular12.calTri(val)>=max, val})
+      send(main, {Eular12.calTri(val)>=x, val})
     end)
   end
 
